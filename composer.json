@@ -1,0 +1,14 @@
+{
+    "name": "unicity/unicity",
+    "description": "Library to generate DB-friendly GUIDs",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andrés Correa Casablanca",
+            "email": "castarco@litipk.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
