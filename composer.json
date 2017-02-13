@@ -10,5 +10,18 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {}
+    "autoload": {
+        "psr-4": {
+            "Unicity\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Unicity\\Tests\\": "tests"
+        }
+    },
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^6.0"
+    }
 }

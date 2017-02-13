@@ -1,0 +1,44 @@
+language: php
+
+cache:
+  directories:
+    - "$HOME/.composer/cache"
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 7.0
+    - php: 7.1
+    - php: nightly
+    - os: linux
+      dist: trusty
+      sudo: false
+      php: hhvm-3.15
+    - os: linux
+      dist: trusty
+      sudo: false
+      php: hhvm-nightly
+  allow_failures:
+    - php: hhvm-3.15
+    - php: hhvm-nightly
+
+before_install:
+  - bash -c 'mkdir bin'
+  - travis_retry bash -c 'curl -sS https://getcomposer.org/installer | php -- --install-dir=bin'
+  - bash -c 'chmod +x bin/composer.phar'
+  - bash -c 'if [ "$TRAVIS_PHP_VERSION" == "hhvm" ]; then rm phpunit.xml; fi;'
+  - bash -c 'if [ "$TRAVIS_PHP_VERSION" == "hhvm" ]; then mv phpunit.hhvm.xml phpunit.xml; fi;'
+
+install:
+  - travis_retry ./bin/composer.phar install -o --no-interaction --prefer-source --ignore-platform-reqs
+
+before_script:
+  - |
+    if [[ $TRAVIS_PHP_VERSION = "hhv"* ]]; then
+      echo "" >> /etc/hhvm/php.ini
+      echo "hhvm.php7.all = true" >> /etc/hhvm/php.ini
+      echo "" >> /etc/hhvm/php.ini
+    fi;
+
+script:
+  - vendor/bin/phpunit
