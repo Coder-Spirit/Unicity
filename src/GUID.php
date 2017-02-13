@@ -3,8 +3,12 @@ declare(strict_types=1);
 
 namespace Unicity;
 
-class GUID implements GloballyUniqueIdentifier
+use Unicity\Interfaces\GUID as GUIDInterface;
+
+class GUID implements GUIDInterface
 {
+    const DEFAULT_GUID_SIZE = 16;
+
     /** @var string */
     private $bytes;
 
@@ -20,7 +24,7 @@ class GUID implements GloballyUniqueIdentifier
         );
     }
 
-    public static function fromBinaryString(string $binStr, int $expectedLength = 16): GUID
+    public static function fromBinaryString(string $binStr, int $expectedLength = self::DEFAULT_GUID_SIZE): GUID
     {
         $strLen = \strlen($binStr);
         if (0 !== $strLen % 2) {
@@ -39,7 +43,7 @@ class GUID implements GloballyUniqueIdentifier
         return new GUID($binStr);
     }
 
-    public static function fromHexString(string $hexStr, int $expectedLength = 16): GUID
+    public static function fromHexString(string $hexStr, int $expectedLength = self::DEFAULT_GUID_SIZE): GUID
     {
         if (0 === \preg_match('/^(([0-9A-F]{2})+|([0-9a-f]{2})+)$/', $hexStr)) {
             throw new UnserializationError('Invalid hexadecimal string');
@@ -51,7 +55,7 @@ class GUID implements GloballyUniqueIdentifier
         );
     }
 
-    public static function fromBase64String(string $b64Str, int $expectedLength = 16): GUID
+    public static function fromBase64String(string $b64Str, int $expectedLength = self::DEFAULT_GUID_SIZE): GUID
     {
         if (0 === \preg_match('^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$', $b64Str)) {
             throw new UnserializationError('Invalid base64 string');
@@ -63,7 +67,7 @@ class GUID implements GloballyUniqueIdentifier
         );
     }
 
-    public static function fromBase64UrlString(string $b64Str, int $expectedLength = 16): GUID
+    public static function fromBase64UrlString(string $b64Str, int $expectedLength = self::DEFAULT_GUID_SIZE): GUID
     {
         return self::fromBase64String(
             \strtr($b64Str, '-_.', '+/='),
@@ -96,7 +100,7 @@ class GUID implements GloballyUniqueIdentifier
         return (\strlen($this->bytes) << 3);
     }
 
-    public function equals(GloballyUniqueIdentifier $guid): bool
+    public function equals(GUIDInterface $guid): bool
     {
         return $guid->asBinaryString() === $this->bytes;
     }
