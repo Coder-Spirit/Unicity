@@ -105,6 +105,11 @@ class GUID implements GUIDInterface
         return $guid->asBinaryString() === $this->bytes;
     }
 
+    public function __toString(): string
+    {
+        return $this->asHexString();
+    }
+
     private static function getTimeBytes(int $nTimeBytes): string
     {
         $ts_parts = explode(' ', microtime());
@@ -121,5 +126,10 @@ class GUID implements GUIDInterface
         }
 
         return $timeBytes;
+    }
+
+    private function __clone()
+    {
+        throw new \BadMethodCallException('Unsupported method');
     }
 }
