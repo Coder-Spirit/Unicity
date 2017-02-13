@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Unicity;
 
-class GUIDInvariantsViolationError extends \Exception implements UnicityError
+class GUIDInvariantsViolationError extends \LogicException implements UnicityError
 {
 
 }
