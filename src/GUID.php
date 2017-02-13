@@ -20,7 +20,7 @@ class GUID implements GloballyUniqueIdentifier
         );
     }
 
-    public static function fromBinaryString(string $binStr): GUID
+    public static function fromBinaryString(string $binStr, int $expectedLength = 16): GUID
     {
         $strLen = \strlen($binStr);
         if (0 !== $strLen % 2) {
@@ -29,31 +29,46 @@ class GUID implements GloballyUniqueIdentifier
         if (8 > $strLen) {
             throw new GUIDInvariantsViolationError('IDs must have at least 8 bytes of entropy');
         }
+        if ($expectedLength !== $strLen) {
+            throw new UnserializationError(
+                'The passed string has an unexpected length ' .
+                \json_encode(['expected' => $expectedLength, 'given' => $strLen])
+            );
+        }
 
         return new GUID($binStr);
     }
 
-    public static function fromHexString(string $hexStr): GUID
+    public static function fromHexString(string $hexStr, int $expectedLength = 16): GUID
     {
         if (0 === \preg_match('/^(([0-9A-F]{2})+|([0-9a-f]{2})+)$/', $hexStr)) {
             throw new UnserializationError('Invalid hexadecimal string');
         }
 
-        return self::fromBinaryString(\hex2bin($hexStr));
+        return self::fromBinaryString(
+            \hex2bin($hexStr),
+            $expectedLength
+        );
     }
 
-    public static function fromBase64String(string $b64Str): GUID
+    public static function fromBase64String(string $b64Str, int $expectedLength = 16): GUID
     {
         if (0 === \preg_match('^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$', $b64Str)) {
             throw new UnserializationError('Invalid base64 string');
         }
 
-        return self::fromBinaryString(\base64_decode($b64Str, true));
+        return self::fromBinaryString(
+            \base64_decode($b64Str, true),
+            $expectedLength
+        );
     }
 
-    public static function fromBase64UrlString(string $b64Str): GUID
+    public static function fromBase64UrlString(string $b64Str, int $expectedLength = 16): GUID
     {
-        return self::fromBase64String(\strtr($b64Str, '-_.', '+/='));
+        return self::fromBase64String(
+            \strtr($b64Str, '-_.', '+/='),
+            $expectedLength
+        );
     }
 
     public function asBinaryString(): string
