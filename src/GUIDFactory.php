@@ -22,10 +22,6 @@ class GUIDFactory implements GUIDFactoryInterface
         $this->nTimeBytes = \max(4, \min(7, $nTimeBytes));
         $this->nRandomBytes = \max(2, \min(9, $nRandomBytes));
         $this->expectedLength = $this->nTimeBytes + $this->nRandomBytes;
-
-        if (0 !== $this->expectedLength % 2) {
-            throw new \InvalidArgumentException('nTimeBytes + nRandomBytes must be an even number.');
-        }
     }
 
     /**
