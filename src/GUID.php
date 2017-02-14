@@ -19,19 +19,20 @@ class GUID implements GUIDInterface
 
     public static function create(int $nTimeBytes = 7, int $nRandomBytes = 9): GUID
     {
+        $nTimeBytes = \max(4, \min(7, $nTimeBytes));
+        $nRandomBytes = \max(2, \min(9, $nRandomBytes));
+
         return self::fromBinaryString(
-            self::getTimeBytes($nTimeBytes) . \random_bytes(\max(2, \min(9, $nRandomBytes)))
+            self::getTimeBytes($nTimeBytes) . \random_bytes($nRandomBytes),
+            $nTimeBytes + $nRandomBytes
         );
     }
 
     public static function fromBinaryString(string $binStr, int $expectedLength = self::DEFAULT_GUID_SIZE): GUID
     {
         $strLen = \strlen($binStr);
-        if (0 !== $strLen % 2) {
-            throw new GUIDInvariantsViolationError('IDs must have an even number of bytes when stored as a binary string');
-        }
-        if (8 > $strLen) {
-            throw new GUIDInvariantsViolationError('IDs must have at least 8 bytes of entropy');
+        if (6 > $expectedLength) {
+            throw new GUIDInvariantsViolationError('IDs must have at least 6 bytes of entropy');
         }
         if ($expectedLength !== $strLen) {
             throw new UnserializationError(
@@ -112,7 +113,6 @@ class GUID implements GUIDInterface
 
     private static function getTimeBytes(int $nTimeBytes): string
     {
-        $nTimeBytes = \max(4, \min(7, $nTimeBytes));
         $bytesPool = self::getAdjustedTimeBytes($nTimeBytes);
 
         $timeBytes = \str_pad('', $nTimeBytes, \chr(0));
