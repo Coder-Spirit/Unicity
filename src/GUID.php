@@ -112,24 +112,34 @@ class GUID implements GUIDInterface
 
     private static function getTimeBytes(int $nTimeBytes): string
     {
-        $ts_parts = explode(' ', microtime());
-
         $nTimeBytes = \max(4, \min(7, $nTimeBytes));
-        $micros = ((int)\round($ts_parts[0] * 1000000) + $ts_parts[1] * 1000000) % (2 ** ($nTimeBytes << 3));
+        $bytesPool = self::getAdjustedTimeBytes($nTimeBytes);
 
         $timeBytes = \str_pad('', $nTimeBytes, \chr(0));
 
         for ($i = $nTimeBytes - 1; $i >= 0; $i--) {
-            $timeByte = \chr($micros & 0xff);
+            $timeByte = \chr($bytesPool & 0xff);
             $timeBytes[$i] = $timeByte;
-            $micros = ($micros - $timeByte) >> 8;
+            $bytesPool = ($bytesPool - $timeByte) >> 8;
         }
 
         return $timeBytes;
     }
 
+    private static function getAdjustedTimeBytes(int $nTimeBytes): int
+    {
+        $ts_parts = \explode(' ', microtime());
+        $micros = (int)\round($ts_parts[0] * 1000000) + ((int)$ts_parts[1]) * 1000000;
+
+        switch ($nTimeBytes) {
+            case 7: return $micros;
+            case 6: return (int)($micros / 1000);
+            default: return (int)($micros / 1000000);
+        }
+    }
+
     private function __clone()
     {
-        throw new \BadMethodCallException('Unsupported method');
+        throw new \BadMethodCallException('GUID objects must not be cloned');
     }
 }
