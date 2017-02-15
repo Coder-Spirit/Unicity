@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Unicity;
+namespace Unicity\Errors;
 
 class UnserializationError extends \RuntimeException implements UnicityError
 {

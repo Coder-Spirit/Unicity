@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Unicity;
 
+use Unicity\Errors\GUIDInvariantsViolationError;
+use Unicity\Errors\UnserializationError;
 use Unicity\Interfaces\GUID as GUIDInterface;
 
 class GUID implements GUIDInterface
