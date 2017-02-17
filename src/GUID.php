@@ -110,7 +110,7 @@ class GUID implements GUIDInterface
 
     public function __toString(): string
     {
-        return $this->asHexString();
+        return $this->asBase64UrlString();
     }
 
     private static function getTimeBytes(int $nTimeBytes): string
