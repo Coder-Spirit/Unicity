@@ -60,7 +60,7 @@ class GUID implements GUIDInterface
 
     public static function fromBase64String(string $b64Str, int $expectedLength = self::DEFAULT_GUID_SIZE): GUID
     {
-        if (0 === \preg_match('^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$', $b64Str)) {
+        if (0 === \preg_match('#^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$#', $b64Str)) {
             throw new UnserializationError('Invalid base64 string');
         }
 
