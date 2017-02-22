@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Unicity\Tests\GUID;
 
 use PHPUnit\Framework\TestCase;
+use Unicity\Interfaces\GUID as GUIDInterface;
 use Unicity\GUID;
 
 /**
@@ -28,6 +29,31 @@ class fromHexStringTestTest extends TestCase
     public function test_unexpected_length()
     {
         GUID::fromHexString('abcdef01', 6);
+    }
+
+    /**
+     * @param string $hexStr
+     * @param int $expectedLength
+     *
+     * @dataProvider validParamsProvider
+     */
+    public function test_valid_params(string $hexStr, int $expectedLength)
+    {
+        $guid = GUID::fromHexString($hexStr, $expectedLength);
+        $this->assertInstanceOf(GUIDInterface::class, $guid);
+        $this->assertInstanceOf(GUID::class, $guid);
+    }
+
+    public function validParamsProvider()
+    {
+        return [
+            ['123456123456', 6],
+            ['1234567812345678', 8],
+            ['12345678901234567890', 10],
+            ['1234567890ab1234567890ab', 12],
+            ['1234567890abcd1234567890abcd', 14],
+            ['1234567890abcdef1234567890abcdef', 16]
+        ];
     }
 
     /**
