@@ -61,11 +61,11 @@ class fromBase64StringTest extends TestCase
      *
      * @dataProvider invalidBase64StringsProvider
      * @expectedException \Unicity\Errors\UnserializationError
-     * @expectedExceptionMessage Invalid hexadecimal string
+     * @expectedExceptionMessage Invalid base64 string
      */
     public function test_invalid_base64_strings(string $invalidBase64Str)
     {
-        GUID::fromHexString($invalidBase64Str, 8);
+        GUID::fromBase64String($invalidBase64Str, 8);
     }
 
     public function invalidBase64StringsProvider()
