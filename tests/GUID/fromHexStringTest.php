@@ -11,7 +11,7 @@ use Unicity\GUID;
  * @covers \Unicity\GUID::__construct
  * @covers \Unicity\GUID::fromHexString
  */
-class fromHexStringTestTest extends TestCase
+class fromHexStringTest extends TestCase
 {
     /**
      * @expectedException \Unicity\Errors\GUIDInvariantsViolationError

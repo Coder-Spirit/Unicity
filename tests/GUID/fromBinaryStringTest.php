@@ -11,7 +11,7 @@ use Unicity\Interfaces\GUID as GUIDInterface;
  * @covers \Unicity\GUID::__construct
  * @covers \Unicity\GUID::fromBinaryString
  */
-class fromBinaryStringTestTest extends TestCase
+class fromBinaryStringTest extends TestCase
 {
     /**
      * @expectedException \Unicity\Errors\GUIDInvariantsViolationError
