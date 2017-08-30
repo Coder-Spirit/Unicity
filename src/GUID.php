@@ -124,8 +124,8 @@ class GUID implements GUIDInterface
         $timeBytes = \str_pad('', $nTimeBytes, \chr(0));
 
         for ($i = $nTimeBytes - 1; $i >= 0; $i--) {
-            $timeByte = \chr($bytesPool & 0xff);
-            $timeBytes[$i] = $timeByte;
+            $timeByte = $bytesPool & 0xff;
+            $timeBytes[$i] = \chr($timeByte);
             $bytesPool = ($bytesPool - $timeByte) >> 8;
         }
 
